@@ -6,6 +6,7 @@ const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // 👈 NEW STATE
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,7 +17,6 @@ const SignIn = () => {
     setError("");
     setLoading(true);
 
-    // Basic frontend validation
     if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       setLoading(false);
@@ -24,7 +24,6 @@ const SignIn = () => {
     }
 
     try {
-      // Example API call (replace with your backend endpoint)
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,11 +33,10 @@ const SignIn = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Invalid credentials");
 
-      // Store token/user in localStorage (optional)
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      navigate("/"); // redirect to home page after login
+      navigate("/");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -74,18 +72,53 @@ const SignIn = () => {
             />
           </div>
 
-          <div>
+          {/* Password Field with Show/Hide Toggle */}
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"} // 👈 Dynamic type
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring focus:ring-blue-200"
               placeholder="••••••••"
             />
+
+            {/* Eye Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-9 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? (
+                // 👁️ Eye Open Icon
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M10 3C5 3 1.73 7.11 1 10c.73 2.89 4 7 9 7s8.27-4.11 9-7c-.73-2.89-4-7-9-7zM10 15a5 5 0 110-10 5 5 0 010 10z" />
+                  <path d="M10 13a3 3 0 100-6 3 3 0 000 6z" />
+                </svg>
+              ) : (
+                // 👁️‍🗨️ Eye Closed Icon
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3.707 2.293a1 1 0 00-1.414 1.414l1.657 1.657A9.98 9.98 0 001 10c.73 2.89 4 7 9 7a8.97 8.97 0 004.636-1.294l1.657 1.657a1 1 0 001.414-1.414L3.707 2.293zM14.12 12.706A4 4 0 017.293 5.88l1.42 1.42a2 2 0 002.987 2.987l1.42 1.42z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
 
           <button
