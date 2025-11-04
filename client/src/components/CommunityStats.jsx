@@ -13,13 +13,23 @@ const CommunityStats = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // ✅ Safe base URL (works both locally & on Render)
+  const API_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
   const fetchStats = async () => {
     try {
-      const apiUrl = `${import.meta.env.VITE_API_URL}/stats`;
+      const apiUrl = `${API_URL}/stats`;
       console.log("📡 Fetching stats from:", apiUrl);
 
-      const res = await fetch(apiUrl);
+      const res = await fetch(apiUrl, { method: "GET" });
+
+      // Handle non-JSON responses (like HTML 404 pages)
+      const contentType = res.headers.get("content-type");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Received non-JSON response from server");
+      }
 
       const data = await res.json();
       console.log("📊 Stats Response:", data);
@@ -31,7 +41,7 @@ const CommunityStats = () => {
         throw new Error(data.message || "Failed to load stats");
       }
     } catch (err) {
-      console.error("Error fetching stats:", err);
+      console.error("❌ Error fetching stats:", err);
       setError("Failed to load community statistics.");
     } finally {
       setLoading(false);
@@ -41,7 +51,7 @@ const CommunityStats = () => {
   useEffect(() => {
     fetchStats();
 
-    // 🕒 Auto-refresh every 30 seconds
+    // Auto-refresh stats every 30 seconds
     const interval = setInterval(fetchStats, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -92,15 +102,21 @@ const CommunityStats = () => {
       )}
 
       {/* Error state */}
-      {error && !loading && (
+      {!loading && error && (
         <div className="text-center py-10 text-red-400 flex flex-col items-center">
           <FaExclamationTriangle className="text-4xl mb-3" />
           <p>{error}</p>
+          <button
+            onClick={fetchStats}
+            className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
+          >
+            Retry 🔄
+          </button>
         </div>
       )}
 
       {/* Stats Cards */}
-      {!loading && !error && (
+      {!loading && !error && stats && (
         <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {cards.map((card, index) => (
             <motion.div
@@ -113,7 +129,9 @@ const CommunityStats = () => {
             >
               <div className="flex flex-col items-center">
                 {card.icon}
-                <h3 className="text-lg font-semibold text-gray-300 mb-2">{card.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-300 mb-2">
+                  {card.title}
+                </h3>
                 <p className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200">
                   {card.value}
                 </p>
