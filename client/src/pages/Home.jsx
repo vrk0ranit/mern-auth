@@ -6,12 +6,10 @@ const Home = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Check if user info exists in localStorage
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
 
     if (!token || !storedUser) {
-      // If not logged in, redirect to SignIn
       navigate("/signin");
     } else {
       setUser(JSON.parse(storedUser));
@@ -24,18 +22,32 @@ const Home = () => {
     navigate("/signin");
   };
 
-  if (!user) return null; // optional: loading state
+  if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 max-w-md w-full text-center">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 max-w-md w-full text-center transition-all">
+        <h1 className="text-3xl font-bold mb-2">
           Welcome, {user.name}! 👋
         </h1>
 
-        <p className="text-gray-600 mb-6">
-          You are logged in as <span className="font-medium">{user.email}</span>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          You are logged in as{" "}
+          <span className="font-medium">{user.email}</span>
         </p>
+
+        {/* If user is admin, show Admin Panel access */}
+        {user.role === "admin" && (
+          <div className="mb-6">
+            <p className="text-yellow-500 font-semibold mb-2">You have Admin privileges.</p>
+            <button
+              onClick={() => navigate("/admin")}
+              className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
+            >
+              🔑 Go to Admin Panel
+            </button>
+          </div>
+        )}
 
         <div className="flex justify-center space-x-4">
           <button
