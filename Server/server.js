@@ -4,6 +4,10 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import issueRoutes from "./routes/issueRoutes.js";
+import statsRoutes from "./routes/statsRoutes.js";
+import path from "path";
+
 
 dotenv.config();
 const app = express();
@@ -14,9 +18,14 @@ app.use(express.json());
 // Connect MongoDB
 connectDB();
 
+// Serve uploaded images
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 // ✅ API routes first
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/issues", issueRoutes);
+app.use("/api/stats", statsRoutes);
 
 
 const PORT = process.env.PORT || 5000;
