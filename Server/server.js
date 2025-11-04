@@ -12,24 +12,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// connect to MongoDB
+// Connect MongoDB
 connectDB();
 
-// routes
+// Routes
 app.use("/api/auth", authRoutes);
 
-// Serve frontend from 'client/dist'
+// Serve frontend
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendPath = path.join(__dirname, "../client/dist");
 
 app.use(express.static(frontendPath));
-
-// Catch-all: send index.html for any unknown routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-//start server
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`🚀 Server running on port ${PORT}`)
+);

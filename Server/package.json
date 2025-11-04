@@ -4,14 +4,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "install": "cd ../client && npm install && cd ../Server && npm install",
-    "start": "npm install && node server.js",
-    "build": "cd ../client && npm install && npm run build"
+    "build": "cd ../client && npm install && npm run build",
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
