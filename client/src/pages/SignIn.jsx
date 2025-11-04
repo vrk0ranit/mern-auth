@@ -25,7 +25,7 @@ const SignIn = () => {
 
     try {
       // Example API call (replace with your backend endpoint)
-      const response = await fetch("http://localhost:5000/api/auth/signin", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -5,7 +5,7 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:5000/api/admin/users`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/users`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -14,7 +14,7 @@ const AdminDashboard = () => {
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/admin/users/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/admin/users/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -23,7 +23,7 @@ const AdminDashboard = () => {
 
   const changeRole = async (id, role) => {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/admin/users/${id}/role`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/admin/users/${id}/role`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
