@@ -23,7 +23,6 @@ const SignUp = () => {
 
     const { name, email, password, confirmPassword } = formData;
 
-    // Basic validation
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
       setLoading(false);
@@ -37,7 +36,6 @@ const SignUp = () => {
     }
 
     try {
-      // Replace this with your actual backend endpoint
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,11 +45,10 @@ const SignUp = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Signup failed");
 
-      // Optional: store token/user in localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      navigate("/signin"); // redirect to sign-in page
+      navigate("/signin");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -60,21 +57,26 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
-          Create Account
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-gray-100 px-4 relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.15),transparent_70%)] pointer-events-none"></div>
+
+      {/* SignUp Card */}
+      <div className="relative z-10 bg-[#1e293b]/80 backdrop-blur-md border border-gray-700 shadow-2xl rounded-2xl p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-6 text-blue-400">
+          Create Your Account 🌟
         </h2>
 
         {error && (
-          <div className="bg-red-100 text-red-700 px-3 py-2 rounded-md mb-4 text-sm">
+          <div className="bg-red-600/20 border border-red-600 text-red-400 px-3 py-2 rounded-md mb-4 text-sm text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-300">
               Full Name
             </label>
             <input
@@ -82,13 +84,14 @@ const SignUp = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
               placeholder="John Doe"
+              className="w-full bg-[#0f172a] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
+          {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-300">
               Email
             </label>
             <input
@@ -96,13 +99,14 @@ const SignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
               placeholder="you@example.com"
+              className="w-full bg-[#0f172a] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
+          {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-300">
               Password
             </label>
             <input
@@ -110,13 +114,14 @@ const SignUp = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
               placeholder="••••••••"
+              className="w-full bg-[#0f172a] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
+          {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-300">
               Confirm Password
             </label>
             <input
@@ -124,23 +129,25 @@ const SignUp = () => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
               placeholder="••••••••"
+              className="w-full bg-[#0f172a] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold shadow-md shadow-blue-600/30 transition disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <div className="text-sm text-center mt-4 text-gray-600">
+        {/* Footer Links */}
+        <div className="text-sm text-center mt-6 text-gray-400">
           Already have an account?{" "}
-          <Link to="/signin" className="text-blue-600 hover:underline">
+          <Link to="/signin" className="text-blue-400 hover:underline transition">
             Sign in
           </Link>
         </div>

@@ -6,7 +6,7 @@ const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 👈 NEW STATE
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,55 +45,58 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
-          Sign In
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-gray-100 px-4 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.15),transparent_70%)] pointer-events-none"></div>
+
+      <div className="relative z-10 bg-[#1e293b]/80 backdrop-blur-md border border-gray-700 shadow-2xl rounded-2xl p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-6 text-blue-400">
+          Welcome Back 👋
         </h2>
 
         {error && (
-          <div className="bg-red-100 text-red-700 px-3 py-2 rounded-md mb-4 text-sm">
+          <div className="bg-red-600/20 border border-red-600 text-red-400 px-3 py-2 rounded-md mb-4 text-sm text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Email
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Email Address
             </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full bg-[#0f172a] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="you@example.com"
             />
           </div>
 
-          {/* Password Field with Show/Hide Toggle */}
+          {/* Password */}
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-300">
               Password
             </label>
             <input
-              type={showPassword ? "text" : "password"} // 👈 Dynamic type
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full bg-[#0f172a] border border-gray-600 rounded-lg px-3 py-2 pr-10 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="••••••••"
             />
 
-            {/* Eye Toggle Button */}
+            {/* Toggle Eye */}
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-9 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              className="absolute right-3 top-9 transform -translate-y-1/2 text-gray-400 hover:text-blue-400 transition"
             >
               {showPassword ? (
-                // 👁️ Eye Open Icon
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -104,7 +107,6 @@ const SignIn = () => {
                   <path d="M10 13a3 3 0 100-6 3 3 0 000 6z" />
                 </svg>
               ) : (
-                // 👁️‍🗨️ Eye Closed Icon
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -121,20 +123,22 @@ const SignIn = () => {
             </button>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold shadow-md shadow-blue-600/30 transition disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <div className="flex justify-between text-sm mt-4 text-gray-600">
-          <Link to="/signup" className="hover:text-blue-600">
-            Don’t have an account? Sign up
+        {/* Footer Links */}
+        <div className="flex justify-between text-sm mt-6 text-gray-400">
+          <Link to="/signup" className="hover:text-blue-400 transition">
+            Don’t have an account? <span className="text-blue-400">Sign up</span>
           </Link>
-          <Link to="/forgot-password" className="hover:text-blue-600">
+          <Link to="/forgot-password" className="hover:text-blue-400 transition">
             Forgot password?
           </Link>
         </div>
